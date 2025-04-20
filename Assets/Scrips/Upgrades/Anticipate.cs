@@ -18,9 +18,15 @@ public class Anticipate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameControll = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
         anticipation = 1;
         bLeft.interactable = false;
         markings[anticipation-1].SetActive(true);
+
+        gameControll.anticipate = true;
+        gameControll.anticipateScript = this;
+
    
     }
 

@@ -7,14 +7,14 @@ using TMPro;
 public class GameController : MonoBehaviour
 {
     public bool gamesOn;
-    private bool startGame;
+    public bool startGame;
     public float countdownStart = 10;
-    private float startTimer;
+    public float startTimer;
     
 
     public Progression prog;
     public Button mainButton;
-    public Button regretButton;
+    
 
     public int playerScore;
     public TextMeshProUGUI playerScoreDisplay;
@@ -29,11 +29,11 @@ public class GameController : MonoBehaviour
 
     private bool buttonActive;
 
-    public Anticipate anticipate;
-    public Endurence endurance;
-    public bool strong;
+    public Anticipate anticipateScript;
+    public Endurence enduranceScript;
 
-    public Button reavealButton, oneUpButton, strengthButton;
+    public bool regret, anticipate, oneUp, endurence, reveal, strength;
+
     
 
     // Start is called before the first frame update
@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
                 playerScoreDisplay.text = "" + playerScore;
                 buttonActive = true;
                 mainButton.interactable = true;
-                reavealButton.interactable = false;
+
             }
         }
         if (buttonActive)
@@ -100,107 +100,88 @@ public class GameController : MonoBehaviour
                 pushes[totalPush].color = used;
                 totalPush++;
 
-                if (anticipate.anticipation == totalPush)
+                if (anticipate) 
                 {
-                    playerScore += prog.scores[prog.counter];
-                }
+                   /* if (anticipateScript == null)
+                    {
+                        anticipateScript = GameObject.FindGameObjectWithTag("Anticipate").GetComponent<Anticipate>();
+                    } */
+
+                    if (anticipateScript.anticipation == totalPush)
+
+                    {
+                        playerScore += prog.scores[prog.counter];
+                    }
+
+                } 
                 playerScoreDisplay.text = "" + playerScore;
 
                 prog.parts[prog.counter].GetComponent<PartScript>().text.text = "" + prog.scores[prog.counter];
                 prog.parts[prog.counter].GetComponent<PartScript>().text.color = Color.black;
                 prog.parts[prog.counter].GetComponent<PartScript>().pushOne.SetActive(true);
 
-                if (!endurance.enduranceActive)
+                if (endurence)
                 {
-                    DeactivateMainButton();
+                   /* if (enduranceScript == null)
+                    {
+                        enduranceScript = GameObject.FindGameObjectWithTag("Endurence").GetComponent<Endurence>();
+                    } */
+
+                    if (!enduranceScript.enduranceActive)
+                    {
+                        DeactivateMainButton();
+                    }
                 }
 
             }
 
-            else if (pushPerPart == 2 && endurance.enduranceActive)
+            else if (pushPerPart == 2 && endurence)
             {
                 playerScore += prog.scores[prog.counter];
                 pushes[totalPush].color = used;
                 totalPush++;
 
-                if (anticipate.anticipation == totalPush)
+                if (anticipate)
                 {
-                    playerScore += prog.scores[prog.counter];
+                    /* if (anticipateScript == null)
+                    {
+                        anticipateScript = GameObject.FindGameObjectWithTag("Anticipate").GetComponent<Anticipate>();
+                    } */
+
+                    if (anticipateScript.anticipation == totalPush)
+
+                    {
+                        playerScore += prog.scores[prog.counter];
+                    }
+
                 }
                 playerScoreDisplay.text = "" + playerScore;
 
                 prog.parts[prog.counter].GetComponent<PartScript>().pushTwo.SetActive(true);
                 mainButton.interactable = false;
-                endurance.UseEndurance();
+
+                /* if (enduranceScript == null)
+                {
+                    enduranceScript = GameObject.FindGameObjectWithTag("Endurence").GetComponent<Endurence>();
+                }*/
+
+                if (enduranceScript.enduranceActive)
+                {
+
+                    enduranceScript.UseEndurance();
+                }
+                
             }
 
-            if (strong)
+            if (strength)
             {
                 playerScore += prog.scores[prog.counter];
-                strong = false;
+                strength = false;
                
             }
 
             playerScoreDisplay.text = "" + playerScore;
         }
-    }
-
-    public void Regret()
-    {
-        
-        if (pushPerPart == 1)
-        {
-            prog.parts[prog.counter].GetComponent<PartScript>().pushOne.SetActive(false);
-            regretButton.interactable = false;
-            totalPush--;
-            pushes[totalPush].color = activated;
-            playerScore -= prog.scores[prog.counter];
-            playerScoreDisplay.text = "" + playerScore;
-
-        }
-        else if( pushPerPart >= 2)
-        {
-            prog.parts[prog.counter].GetComponent<PartScript>().pushTwo.SetActive(false);
-            regretButton.interactable = false;
-            totalPush--;
-            pushes[totalPush].color = activated;
-            playerScore -= prog.scores[prog.counter];
-            playerScoreDisplay.text = "" + playerScore;
-        }
-
-    }
-
-    public void OneUp()
-    {
-        amountPushes++;
-        pushes[amountPushes-1].color = activated;
-        oneUpButton.interactable = false;
-
-
-    }
-
-    public void Reveal()
-    {
-        if (!gamesOn)
-        {
-            for (int i = 1; i < (prog.scores.Length); i++)
-            {
-                if (prog.scores[i] <= 30)
-                {
-               
-                    prog.parts[i].GetComponent<PartScript>().text.color = Color.magenta;
-                }
-            }
-
-            reavealButton.interactable = false;
-
-            
-        }
-    }
-    public void Strength()
-    {
-        strong = true;
-        strengthButton.interactable = false;
     }
 
     public void ActivateMainButton()

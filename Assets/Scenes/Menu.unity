@@ -1017,13 +1017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coins: 0
-  hasRegret: 0
-  hasAnticipate: 0
-  has1Up: 0
-  hasEndurence: 0
-  hasReveal: 0
-  hasStrenght: 0
-  hasStealDefence: 0
+  owned: 0000000000000000
 --- !u!4 &1461939205
 Transform:
   m_ObjectHideFlags: 0

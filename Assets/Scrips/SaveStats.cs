@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class SaveStats : MonoBehaviour
 {
+    public static SaveStats Instance;
+
     public int coins;
 
-    public bool hasRegret, hasAnticipate, has1Up, hasEndurence, hasReveal, hasStrenght, hasStealDefence;
+   // public bool regret, anticipate, oneUp, endurence, reveal, strenght, attackOrDefence, wheelOfFortune;
+    
+    public bool[] owned;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
 }
